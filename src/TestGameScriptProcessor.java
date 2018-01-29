@@ -42,6 +42,39 @@ class TestGameScriptProcessor {
 		Assertions.assertEquals(83, proc.RedScore());		
 	}
 	
+	@Test
+	void ControllingBlueSwitchGainsPoints() {
+		ArrayList<String> gameScript = new ArrayList<>();
+		gameScript = addBlueSwitchEvents1(gameScript);
+		GameScriptProcessor proc = new GameScriptProcessor(gameScript);
+		proc.Run();
+		Assertions.assertEquals(79, proc.BlueScore());		
+		Assertions.assertEquals(52, proc.RedScore());		
+	}
+	
+	@Test
+	void ControllingRedSwitchGainsPoints() {
+		ArrayList<String> gameScript = new ArrayList<>();
+		gameScript = addRedSwitchEvents1(gameScript);
+		GameScriptProcessor proc = new GameScriptProcessor(gameScript);
+		proc.Run();
+		Assertions.assertEquals(11, proc.BlueScore());		
+		Assertions.assertEquals(125, proc.RedScore());		
+	}
+	
+	@Test
+	void ThisMatchWithLostOfEvents() {
+		ArrayList<String> gameScript = new ArrayList<>();
+		gameScript = addCrosslineEvents(gameScript);
+		gameScript = addScaleEvents1(gameScript);
+		gameScript = addBlueSwitchEvents1(gameScript);
+		gameScript = addRedSwitchEvents1(gameScript);
+		GameScriptProcessor proc = new GameScriptProcessor(gameScript);
+		proc.Run();
+		Assertions.assertEquals(148, proc.BlueScore());		
+		Assertions.assertEquals(270, proc.RedScore());		
+	}
+	
 		
 
 	public ArrayList<String> readFileString() {
@@ -80,6 +113,25 @@ class TestGameScriptProcessor {
 		script.add("80,red,scale");
 		script.add("80,blue,scale");
 		script.add("103,red,scale");
+		return script;
+	}
+	public ArrayList<String> addBlueSwitchEvents1(ArrayList<String> script) {
+		script.add("20,blue,blueswitch");
+		script.add("56,red,blueswitch");
+		script.add("86,blue,blueswitch");
+		script.add("90,red,blueswitch");
+		script.add("91,blue,blueswitch");
+		script.add("130,red,blueswitch");
+		return script;
+	}
+	public ArrayList<String> addRedSwitchEvents1(ArrayList<String> script) {
+		script.add("15,red,redswitch");
+		script.add("55,blue,redswitch");
+		script.add("56,red,redswitch");
+		script.add("76,blue,redswitch");
+		script.add("79,red,redswitch");
+		script.add("133,blue,redswitch");
+		script.add("140,red,redswitch");
 		return script;
 	}
 }
