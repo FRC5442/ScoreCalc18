@@ -6,6 +6,7 @@ import java.util.HashMap;
 public class GameScriptProcessor {
 	private ArrayList<String> _gameScript;
 	private HashMap<Integer, ArrayList<Action>> _tickMap;
+	private PowerUps _powerUps;
 	private int _redScore;
 	private int _blueScore;
 	private String _script;
@@ -18,6 +19,7 @@ public class GameScriptProcessor {
 		_scale = new GameItem(GameItemType.Scale);
 		_redSwitch = new GameItem(GameItemType.RedSwitch);
 		_blueSwitch = new GameItem(GameItemType.BlueSwitch);
+		_powerUps = new PowerUps();
 		
 		_gameScript = gameScript;
 		_tickMap = new HashMap<>();
@@ -25,10 +27,21 @@ public class GameScriptProcessor {
 		for(String s : _gameScript) {
 			Integer index = Integer.parseInt( s.split(",")[0]);
 			Action action = new Action(s.split(",")[1], s.split(",")[2]);
-			ArrayList<Action> currentTickActions = _tickMap.get(index);
-			if (currentTickActions == null) currentTickActions = new ArrayList();
-			currentTickActions.add(action);
-			_tickMap.put(index, currentTickActions);
+			switch(action.get_action()) {
+			case Boost1:
+			case Boost2:
+			case Boost3:
+			case Force1:
+			case Force2:
+			case Force3:
+				_powerUps.Add(new PowerUp(index, action.get_alliance(), action.get_action()));
+				break;
+			default:
+				ArrayList<Action> currentTickActions = _tickMap.get(index);
+				if (currentTickActions == null) currentTickActions = new ArrayList<Action>();
+				currentTickActions.add(action);
+				_tickMap.put(index, currentTickActions);
+			}
 		}
 	}
 	public void Run() {
@@ -78,6 +91,26 @@ public class GameScriptProcessor {
 			else {
 				_redScore += _scale.RedScore() + _redSwitch.RedScore();
 				_blueScore += _scale.BlueScore() + _blueSwitch.BlueScore();
+				
+				PowerUp currentPowerUp = _powerUps.get_currentPowerUp(tick);
+				if (currentPowerUp != null) {
+					switch(currentPowerUp.get_type()) {
+					case Boost1:
+						if (currentPowerUp.get_owner() == Alliance.Red) _redScore += _redSwitch.RedScore();
+						else _blueScore += _blueSwitch.BlueScore();
+						break;
+					case Boost2:
+						if (currentPowerUp.get_owner() == Alliance.Red) _redScore += _scale.RedScore();
+						else _blueScore += _scale.BlueScore();
+						break;
+					case Boost3:
+						if (currentPowerUp.get_owner() == Alliance.Red) _redScore += _scale.RedScore() + _redSwitch.RedScore();
+						else _blueScore += _scale.BlueScore() + _blueSwitch.BlueScore();
+						break;
+					default:
+						break;
+					}
+				}
 			}
 			
 		}

@@ -131,6 +131,20 @@ class TestGameScriptProcessor {
 		Assertions.assertEquals(328, proc.RedScore());		
 	}
 	
+	@Test
+	void BoostedGivesYouMegaPoints() {
+		ArrayList<String> gameScript = new ArrayList<>();
+		gameScript = addUnboostedEvents(gameScript);
+		GameScriptProcessor procUnboosted = new GameScriptProcessor(gameScript);
+		procUnboosted.Run();
+		ArrayList<String> gameScriptBoost = new ArrayList<>();
+		gameScriptBoost = addUnboostedEvents(gameScriptBoost);
+		gameScriptBoost = addBoostedEvents(gameScriptBoost);
+		GameScriptProcessor procBoosted = new GameScriptProcessor(gameScriptBoost);
+		procBoosted.Run();
+		Assertions.assertEquals(30, procBoosted.RedScore()-procUnboosted.RedScore());
+		Assertions.assertEquals(10, procBoosted.BlueScore()-procUnboosted.BlueScore());
+	}
 		
 
 	public ArrayList<String> readFileString() {
@@ -200,7 +214,6 @@ class TestGameScriptProcessor {
 	public ArrayList<String> addSwitchEventsAuto1(ArrayList<String> script) {
 		script.add("5,red,redSwitch");
 		script.add("6,blue,blueSwitch");
-		
 		return script;
 	}
 	public ArrayList<String> addSwitchEventsTeleop1(ArrayList<String> script) {
@@ -225,6 +238,18 @@ class TestGameScriptProcessor {
 		script.add("79,red,redswitch");
 		script.add("133,blue,redswitch");
 		script.add("140,red,redswitch");
+		return script;
+	}
+	public ArrayList<String> addUnboostedEvents(ArrayList<String> script) {
+		script.add("120,red,redswitch");
+		script.add("130,blue,blueswitch");
+		script.add("140,red,scale");
+		return script;
+	}
+	public ArrayList<String> addBoostedEvents(ArrayList<String> script) {
+		script.add("120,red,boost3");
+		script.add("130,blue,boost3");
+		script.add("140,red,boost3");
 		return script;
 	}
 }

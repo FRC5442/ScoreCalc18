@@ -30,11 +30,23 @@ public class Action  {
 		case "redswitch" :
 			_action = ActionType.RedSwitch;
 			break;
-		case "boost" :
-			_action = ActionType.Boost;
+		case "boost1" :
+			_action = ActionType.Boost1;
 			break;
-		case "force" :
-			_action = ActionType.Force;
+		case "boost2" :
+			_action = ActionType.Boost2;
+			break;
+		case "boost3" :
+			_action = ActionType.Boost3;
+			break;
+		case "force1" :
+			_action = ActionType.Force1;
+			break;
+		case "force2" :
+			_action = ActionType.Force2;
+			break;
+		case "force3" :
+			_action = ActionType.Force3;
 			break;
 		case "climb" :
 			_action = ActionType.Climb;
