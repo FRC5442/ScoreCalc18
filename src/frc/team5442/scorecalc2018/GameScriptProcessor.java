@@ -38,6 +38,7 @@ public class GameScriptProcessor {
 				for(Action currentAction : tickActions) {
 					switch(currentAction.get_action()) {
 					case CrossLine:
+					case Park:
 						if(currentAction.get_alliance() == Alliance.Red) {
 							_redScore += 5;
 						}
@@ -45,6 +46,16 @@ public class GameScriptProcessor {
 							_blueScore += 5;
 						}
 						break;
+					case Levitate:
+					case Climb:
+						if(currentAction.get_alliance() == Alliance.Red) {
+							_redScore += 30;
+						}
+						if(currentAction.get_alliance() == Alliance.Blue) {
+							_blueScore += 30;
+						}
+						break;
+					
 					case Scale:
 						_scale.set_owner(currentAction.get_alliance());
 						break;
@@ -53,15 +64,22 @@ public class GameScriptProcessor {
 						break;
 					case RedSwitch:
 						_redSwitch.set_owner(currentAction.get_alliance());
-						break;
+						
 					default:
 						break;
 					
 					}
 				}
 			}
-			_redScore += _scale.RedScore() + _blueSwitch.RedScore() + _redSwitch.RedScore();
-			_blueScore += _scale.BlueScore() + _blueSwitch.BlueScore() + _redSwitch.BlueScore();
+			if(tick <= 15) {
+				_redScore += (_scale.RedScore() + _redSwitch.RedScore()) * 2;
+				_blueScore += (_scale.BlueScore() + _blueSwitch.BlueScore()) * 2;
+			}
+			else {
+				_redScore += _scale.RedScore() + _redSwitch.RedScore();
+				_blueScore += _scale.BlueScore() + _blueSwitch.BlueScore();
+			}
+			
 		}
 		
 	}
