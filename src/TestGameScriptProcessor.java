@@ -146,6 +146,22 @@ class TestGameScriptProcessor {
 		Assertions.assertEquals(10, procBoosted.BlueScore()-procUnboosted.BlueScore());
 	}
 		
+	@Test
+	void ForceGivesYouPoints() {
+		ArrayList<String> gameScript = new ArrayList<>();
+		gameScript = addNonforcedEvents(gameScript);
+		GameScriptProcessor procNonforced = new GameScriptProcessor(gameScript);
+		procNonforced.Run();
+		ArrayList<String> gameScriptBoost = new ArrayList<>();
+		gameScriptBoost = addNonforcedEvents(gameScriptBoost);
+		gameScriptBoost = addForcedEvents(gameScriptBoost);
+		GameScriptProcessor procForced = new GameScriptProcessor(gameScriptBoost);
+		procForced.Run();
+		Assertions.assertEquals(72, procNonforced.BlueScore());
+		Assertions.assertEquals(-20, procForced.BlueScore()-procNonforced.BlueScore());
+		Assertions.assertEquals(0, procNonforced.RedScore());
+		Assertions.assertEquals(40, procForced.RedScore());
+	}
 
 	public ArrayList<String> readFileString() {
 		String filePath = "C:\\Users\\tunruh\\Desktop\\match01.csv";
@@ -250,6 +266,18 @@ class TestGameScriptProcessor {
 		script.add("120,red,boost3");
 		script.add("130,blue,boost3");
 		script.add("140,red,boost3");
+		return script;
+	}
+	public ArrayList<String> addNonforcedEvents(ArrayList<String> script) {
+		script.add("120,blue,redswitch");
+		script.add("130,blue,blueswitch");
+		script.add("100,blue,scale");
+		return script;
+	}
+	public ArrayList<String> addForcedEvents(ArrayList<String> script) {
+		script.add("120,red,force1");
+		script.add("130,red,force2");
+		script.add("140,red,force3");
 		return script;
 	}
 }

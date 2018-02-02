@@ -96,16 +96,24 @@ public class GameScriptProcessor {
 				if (currentPowerUp != null) {
 					switch(currentPowerUp.get_type()) {
 					case Boost1:
-						if (currentPowerUp.get_owner() == Alliance.Red) _redScore += _redSwitch.RedScore();
-						else _blueScore += _blueSwitch.BlueScore();
+						boost1(currentPowerUp);
 						break;
 					case Boost2:
-						if (currentPowerUp.get_owner() == Alliance.Red) _redScore += _scale.RedScore();
-						else _blueScore += _scale.BlueScore();
+						boost2(currentPowerUp);
 						break;
 					case Boost3:
-						if (currentPowerUp.get_owner() == Alliance.Red) _redScore += _scale.RedScore() + _redSwitch.RedScore();
-						else _blueScore += _scale.BlueScore() + _blueSwitch.BlueScore();
+						boost1(currentPowerUp);
+						boost2(currentPowerUp);
+						break;
+					case Force1:
+						force1(currentPowerUp);
+						break;
+					case Force2:
+						force2(currentPowerUp);
+						break;
+					case Force3:
+						force1(currentPowerUp);
+						force2(currentPowerUp);
 						break;
 					default:
 						break;
@@ -115,6 +123,28 @@ public class GameScriptProcessor {
 			
 		}
 		
+	}
+	private void force2(PowerUp currentPowerUp) {
+		if (currentPowerUp.get_owner() == Alliance.Red && _scale.RedScore() == 0) {
+			_redScore += 1;
+			_blueScore -= 1;
+		}
+		else if (_scale.BlueScore() == 0) {
+			_blueScore += 1;
+			_redScore -= 1;
+		}
+	}
+	private void force1(PowerUp currentPowerUp) {
+		if (currentPowerUp.get_owner() == Alliance.Red && _redSwitch.RedScore() == 0) _redScore += 1;
+		else if (_blueSwitch.BlueScore() == 0) _blueScore += 1;
+	}
+	private void boost2(PowerUp currentPowerUp) {
+		if (currentPowerUp.get_owner() == Alliance.Red) _redScore += _scale.RedScore();
+		else _blueScore += _scale.BlueScore();
+	}
+	private void boost1(PowerUp currentPowerUp) {
+		if (currentPowerUp.get_owner() == Alliance.Red) _redScore += _redSwitch.RedScore();
+		else _blueScore += _blueSwitch.BlueScore();
 	}
 	public String script() {
 		return _script;

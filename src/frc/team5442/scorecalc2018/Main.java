@@ -15,6 +15,8 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.awt.event.ActionEvent;
 
 public class Main extends JFrame {
@@ -82,18 +84,23 @@ public class Main extends JFrame {
 		btnBrowse.setBounds(568, 31, 97, 25);
 		contentPane.add(btnBrowse);
 		
+		JLabel lblResults = new JLabel("Results");
+		lblResults.setBounds(145, 342, 520, 16);
+		contentPane.add(lblResults);
+
 		JButton btnRunMatch = new JButton("Run Match");
 		btnRunMatch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				ArrayList<String> gameScript = new ArrayList<>();
+				for (String s: Arrays.asList(txtMatchEvents.getText().split("\n"))) {
+					gameScript.add(s);					
+				}
+				GameScriptProcessor proc = new GameScriptProcessor(gameScript);
+				proc.Run();
+				lblResults.setText("Match Score: Red(" + Integer.toString(proc.RedScore()) + ") Blue(" + Integer.toString(proc.BlueScore()) + ")");		
 			}
 		});
 		btnRunMatch.setBounds(36, 338, 97, 25);
 		contentPane.add(btnRunMatch);
-		
-		JLabel lblResults = new JLabel("Results");
-		lblResults.setBounds(145, 342, 520, 16);
-		contentPane.add(lblResults);
-				
 	}
 }
